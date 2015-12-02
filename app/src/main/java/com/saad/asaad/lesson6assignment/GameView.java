@@ -14,6 +14,7 @@ import android.view.SurfaceView;
  */
 public class GameView extends SurfaceView {
     private SurfaceHolder holder;
+    private Bitmap CuttingBoard;
     private Bitmap Pot;
     private Bitmap Onion;
     private Bitmap Tomato;
@@ -39,6 +40,7 @@ public class GameView extends SurfaceView {
         holder.addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
+                CuttingBoard = BitmapFactory.decodeResource(getResources(), R.drawable.cutting_board);
                 Pot = BitmapFactory.decodeResource(getResources(), R.drawable.pot);
                 Onion = BitmapFactory.decodeResource(getResources(),R.drawable.onion);
                 Tomato = BitmapFactory.decodeResource(getResources(),R.drawable.tomato);
@@ -67,10 +69,11 @@ public class GameView extends SurfaceView {
     protected void onDraw(Canvas canvas) {
 
         canvas.drawColor(Color.WHITE);
+        // canvas.drawBitmap(CuttingBoard, 900, 900, null);
         canvas.drawText("Vegetables Count: " + String.valueOf(score), 10.0f, 50.0f, scorePaint);
         if(OnionActive){
             OnionY = OnionY - 5;
-            if ( OnionY < 325 ) {
+            if ( OnionY < 150 ) {
                 OnionX = -50.0f;
                 OnionY = -101.0f;
                 OnionActive = false;
@@ -80,7 +83,7 @@ public class GameView extends SurfaceView {
         }
         if(TomatoActive){
             TomatoY = TomatoY - 5;
-            if ( TomatoY < 325 ) {
+            if ( TomatoY < 150 ) {
                 TomatoX = -50.0f;
                 TomatoY = -101.0f;
                 TomatoActive = false;
@@ -90,7 +93,7 @@ public class GameView extends SurfaceView {
         }
         if(CarrotActive){
             CarrotY = CarrotY - 5;
-            if ( CarrotY < 325 ) {
+            if ( CarrotY < 150 ) {
                 CarrotX = -50.0f;
                 CarrotY = -101.0f;
                 CarrotActive = false;
@@ -103,22 +106,23 @@ public class GameView extends SurfaceView {
         if(PotX > getWidth()) PotX = -205.0f;
         canvas.drawBitmap(Pot, PotX, PotY, null);
 
-        if (OnionX >= PotX && OnionX <= PotX + Pot.getWidth()
-                && OnionY <= PotY + Pot.getHeight() && OnionY >= PotY + Pot.getHeight() - 25.0f
-        || TomatoX >= PotX && TomatoX <= PotX + Pot.getWidth()
-                && TomatoY <= PotY + Pot.getHeight() && TomatoY >= PotY + Pot.getHeight() - 25.0f
-        || CarrotX >= PotX && CarrotX <= PotX + Pot.getWidth()
-                && CarrotY <= PotY + Pot.getHeight() && CarrotY >= PotY + Pot.getHeight() - 25.0f ){
+        if ( CarrotY <= PotY + Pot.getHeight() && CarrotY >= PotY + Pot.getHeight() - 25.0f){
+            score++;
+            CarrotActive = false;
+            CarrotX = -50.0f;
+            CarrotY = -101.0f;
+        }
+        if ( OnionY <= PotY + Pot.getHeight() && OnionY >= PotY + Pot.getHeight() - 25.0f){
             score++;
             OnionActive = false;
             OnionX = -50.0f;
             OnionY = -101.0f;
+        }
+        if ( TomatoY <= PotY + Pot.getHeight() && TomatoY >= PotY + Pot.getHeight() - 25.0f){
+            score++;
             TomatoActive = false;
             TomatoX = -50.0f;
             TomatoY = -101.0f;
-            CarrotActive = false;
-            CarrotX = -50.0f;
-            CarrotY = -101.0f;
         }
 
     }
